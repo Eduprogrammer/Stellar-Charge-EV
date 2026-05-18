@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import axios from "axios";
 
-const API = "http://localhost:3001/api";
-const CHARGER_URL = `http://localhost:3001/charge?charger=EVSE_001`;
+const API = "https://stellar-charge-ev-production.up.railway.app/api";
+const CHARGER_URL = `https://stellar-charge-ev-production.up.railway.app/charge?charger=EVSE_001`;
 
 type Estado = "idle" | "carregando" | "finalizado" | "erro";
 
