@@ -4,6 +4,7 @@ import axios from "axios";
 
 const API = "https://stellar-charge-ev-production.up.railway.app/api";
 const CHARGER_URL = `https://stellar-charge-ev-production.up.railway.app/charge?charger=EVSE_001`;
+const STELLAR_EXPERT_URL = "https://stellar.expert/explorer/testnet/account/GDXD77AVGS32EI7HQE6IZHE4JVRKE2CZVKWEZSTBQXVAEJNY3EUQ7EXS";
 
 type Estado = "idle" | "carregando" | "finalizado" | "erro";
 
@@ -138,6 +139,14 @@ export default function App() {
               <p>🔋 Sessão <strong>#{sessao.sessaoId}</strong></p>
               <p>💰 Total pago: <strong>{sessao.xlmTotal} XLM</strong></p>
               <p style={styles.onchain}>✅ Confirmado on-chain na Stellar Testnet</p>
+              
+                href={STELLAR_EXPERT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={styles.link}
+              >
+                🔗 Ver transação no Stellar Expert
+              </a>
             </div>
           )}
 
@@ -278,6 +287,13 @@ const styles: Record<string, React.CSSProperties> = {
   onchain: {
     color: "#4ade80",
     fontSize: "0.85rem",
+  },
+  link: {
+    display: "block",
+    marginTop: "8px",
+    color: "#f97316",
+    fontSize: "0.85rem",
+    textDecoration: "none",
   },
   erro: {
     color: "#f87171",
