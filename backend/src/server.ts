@@ -1,4 +1,6 @@
 import express from "express";
+import x402Router from "./x402";
+import cors from "cors";
 import { WebSocketServer, WebSocket } from "ws";
 import * as http from "http";
 import * as dotenv from "dotenv";
@@ -15,11 +17,12 @@ import { conectarSimulador } from "./ocpp/simulator";
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
+app.use("/api/x402", x402Router);
 
 const server = http.createServer(app);
 
-// WSS sem path e sem server — controla upgrade manualmente
 const wss = new WebSocketServer({ noServer: true });
 
 server.on("upgrade", (req, socket, head) => {
@@ -32,14 +35,11 @@ server.on("upgrade", (req, socket, head) => {
   }
 });
 
-// Estado da sessão atual
 let sessaoAtiva: {
   sessaoId: number;
   meterStart: number;
   ws: WebSocket;
 } | null = null;
-
-// ─── OCPP WebSocket Server ──────────────────────────────────────────────────
 
 wss.on("connection", (ws, req) => {
   const chargerId = req.url?.split("/ocpp/")[1] || "EVSE_001";
@@ -88,9 +88,7 @@ wss.on("connection", (ws, req) => {
               Math.round(kWh * Number(PRECO_KWH_STROOPS))
             );
 
-            console.log(
-              `[OCPP] +${incrementoWh}Wh = ${custoIncremento} stroops`
-            );
+            console.log(`[OCPP] +${incrementoWh}Wh = ${custoIncremento} stroops`);
 
             try {
               await atualizarConsumo(sessaoAtiva.sessaoId, custoIncremento);
@@ -116,8 +114,6 @@ wss.on("connection", (ws, req) => {
     console.log("[OCPP] EVSE desconectado");
   });
 });
-
-// ─── REST API ───────────────────────────────────────────────────────────────
 
 app.post("/api/sessao/iniciar", async (req, res) => {
   try {
@@ -189,8 +185,6 @@ app.get("/api/sessao/status", (req, res) => {
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, timestamp: new Date().toISOString() });
 });
-
-// ─── Start ──────────────────────────────────────────────────────────────────
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
