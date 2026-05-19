@@ -139,7 +139,7 @@ export default function App() {
               <p>🔋 Sessão <strong>#{sessao.sessaoId}</strong></p>
               <p>💰 Total pago: <strong>{sessao.xlmTotal} XLM</strong></p>
               <p style={styles.onchain}>✅ Confirmado on-chain na Stellar Testnet</p>
-              
+              <a              
                 href={STELLAR_EXPERT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -359,3 +359,4 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#aaa",
   },
 };
+
