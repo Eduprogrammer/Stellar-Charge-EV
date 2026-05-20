@@ -1,6 +1,8 @@
 import WebSocket from "ws";
 
-const BACKEND_URL = "ws://localhost:3001/ocpp/EVSE_001";
+const BACKEND_URL = process.env.RAILWAY_PUBLIC_DOMAIN
+  ? `wss://${process.env.RAILWAY_PUBLIC_DOMAIN}/ocpp/EVSE_001`
+  : "ws://localhost:3001/ocpp/EVSE_001";
 
 let ws: WebSocket;
 let meterValue = 0;
